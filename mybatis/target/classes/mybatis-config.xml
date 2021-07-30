@@ -14,18 +14,18 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
 
-    <!-- 配置数据源，交给 spring 去做-->
-    <typeAliases>
-        <!-- 批量扫描别名 -->
-        <package name="com.withered.pojo"/>
-    </typeAliases>
+<!--    &lt;!&ndash; 配置数据源，交给 spring 去做&ndash;&gt;-->
+<!--    <typeAliases>-->
+<!--        &lt;!&ndash; 批量扫描别名 &ndash;&gt;-->
+<!--        <package name="com.withered.pojo"/>-->
+<!--    </typeAliases>-->
 
     <environments default="development">
         <environment id="development">
             <!-- 使用JDBC事务管理。如果使用 Spring + MyBatis，则没有必要配置事务管理器 -->
             <transactionManager type="JDBC"></transactionManager>
             <!-- 数据库连接池 -->
-            <dataSource type="POOLED">  <!-- 这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来，避免了创建新的连接实例时所必需的初始化和认证时间。 -->
+            <dataSource type="POOLED">  <!-- POOLED：这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来，避免了创建新的连接实例时所必需的初始化和认证时间。 -->
                 <property name="driver" value="${jdbc.driver}"/>
                 <property name="url" value="${jdbc.url}"/>
                 <property name="username" value="${jdbc.username}"/>

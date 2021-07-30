@@ -1,6 +1,6 @@
-# MyBatis开发学习记录
+# MyBatis和Spring MVC整合学习记录
 
-这个项目是使用Mybatis操作数据库的示例，本示例是只关于Mybatis的，不包括Mybatis和Spring整合的部分。
+这个项目是使用Mybatis操作数据库的示例，本示例是关于Mybatis和Spring整合的部分。
 
 ## 关于MyBatis中的一点东西
 
@@ -161,7 +161,7 @@ properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFac
     <!-- 配置数据源，交给 spring 去做-->
     <typeAliases>
         <!-- 批量扫描别名 -->
-        <package name="com.withered.pojo"/>
+        <package name="com.com.withered.pojo"/>
     </typeAliases>
 
     <environments default="development">
@@ -179,7 +179,7 @@ properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFac
     </environments>
 
     <mappers>
-        <mapper resource="com/withered/mapper/UserMapper.xml"/>
+        <mapper resource="com/com.withered/mapper/UserMapper.xml"/>
     </mappers>
 
 </configuration>
@@ -189,20 +189,15 @@ properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFac
 
 配置数据库之前需要先连接本地数据库。路径：Database ==> + ==> Data Source => MySQL => 添加本地已经建好的数据库。
 
-数据库配置文件命名为 `database.properties`，放在 `resources` 下。自己创建的数据库名为 `myweb`，用户名和密码修改为自己数据库的用户名和密码。
+数据库配置文件命名为 `db.properties`，放在 `resources` 下。自己创建的数据库名为 `myweb`，用户名和密码修改为自己数据库的用户名和密码。
 
 ```properties
 # 数据库配置文件
 jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/myweb
+# mysql8.0 要多加一个时区设置serverTimeZone=UTC
+jdbc.url=jdbc:mysql://localhost:3306/myweb?userSSL=true&userUnicode=true&characterEncoding=utf-8&serverTimeZone=UTC
 jdbc.username=root
-jdbc.password=123456
-```
-
-如果上面的 jdbc.url 连接失败，可以尝试修改以下的参数
-
-```properties
-jdbc.url=jdbc:mysql://localhost:3306/myweb?userSSL=false&userUnicode=true&characterEncoding=utf-8&serverTimeZone=UTC
+jdbc.password=1234567
 ```
 
 #### 3）日志配置文件
@@ -253,7 +248,7 @@ public class MybatisUtils {
 
 ## 3. 编写实体类
 
-在 `src/main/java`  下创建包 `com/withered/pojo`， 在该包下创建实体类 `User.java`。
+在 `src/main/java`  下创建包 `com/com.withered/pojo`， 在该包下创建实体类 `User.java`。
 
 这里以用户为例，创建实体类 `User`
 
@@ -272,7 +267,7 @@ public class User {
 
 ## 4. 编写Dao层
 
-在 `src/main/java`  下创建包 `com/withered/mapper`， 在该包下创建接口 `UserMapper.java` 以及 `UserMapper.xml`。
+在 `src/main/java`  下创建包 `com/com.withered/mapper`， 在该包下创建接口 `UserMapper.java` 以及 `UserMapper.xml`。
 
 `UserMapper.java`：dao层接口，包括数据库的增删改查。这里以查询全部数据为例。这个接口中我使用了模板 `T`， 因为之后想要创建一个dao层的公共接口，这样就不用每次都重新写一遍接口。
 
@@ -285,7 +280,7 @@ public interface UserMapper<T> {
 `UserMapper.xml`：对应相应的dao层接口，编写sql语句。
 
 ```xml
-<mapper namespace="com.withered.mapper.UserMapper">
+<mapper namespace="com.com.withered.dao.UserMapper">
     <select id="getList" resultType="User">
         select * from user;
     </select>
@@ -296,7 +291,7 @@ public interface UserMapper<T> {
 
 ## 5. 测试
 
-在 `test/java` 下创建和 `src/main/java` 相同的结构，创建包 `com/withered/mapper` ，在该包下编写测试类 `UserMapperTest.java` ，测试mapper是否正确。
+在 `test/java` 下创建和 `src/main/java` 相同的结构，创建包 `com/com.withered/mapper` ，在该包下编写测试类 `UserMapperTest.java` ，测试mapper是否正确。
 
 ```java
 public class UserMapperTest {

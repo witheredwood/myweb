@@ -14,12 +14,6 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
 
-    <!-- 配置数据源，交给 spring 去做-->
-    <typeAliases>
-        <!-- 批量扫描别名 -->
-        <package name="com.withered.pojo"/>
-    </typeAliases>
-
     <environments default="development">
         <environment id="development">
             <!-- 使用JDBC事务管理。如果使用 Spring + MyBatis，则没有必要配置事务管理器 -->
@@ -35,7 +29,8 @@
     </environments>
 
     <mappers>
-        <mapper resource="com/withered/mapper/UserMapper.xml"/>
+        <!-- 一次加载一个映射文件 -->
+        <mapper resource="com/com.withered/mapper/UserMapper.xml"/>
     </mappers>
 
 </configuration>

@@ -18,13 +18,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mybatis -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.7</version>
-        </dependency>
-
         <!-- MySQL数据库驱动 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -36,6 +29,13 @@
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.5</version>
+        </dependency>
+
+        <!-- Mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.7</version>
         </dependency>
 
         <!-- 日志log4j -->
