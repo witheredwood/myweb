@@ -40,13 +40,96 @@ sqlSession.close();  // 每个SqlSession必须要关闭
 
 
 
-## 开发框架搭建
+## 1. 开发框架搭建
+
+### 1.1 搭建Maven环境
+
+1. **创建Maven工程**
+
+在IDEA中创建一个Maven项目。
+
+2. **导入依赖**
+
+在 `pom.xml` 中添加需要的依赖和Maven资源过滤。
+
+添加的依赖如下：
+
+- 测试：junit5
+
+- 数据库相关：数据库驱动，连接池
+- dao层框架：mybatis
+- 日志：log4j
+
+```xml
+<dependencies>
+    <!-- junit5 -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>RELEASE</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Mybatis -->
+    <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis</artifactId>
+        <version>3.5.7</version>
+    </dependency>
+
+    <!-- MySQL数据库驱动 -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.24</version>
+    </dependency>
+    <!-- 数据库连接池c3p0 -->
+    <dependency>
+        <groupId>com.mchange</groupId>
+        <artifactId>c3p0</artifactId>
+        <version>0.9.5.5</version>
+    </dependency>
+
+    <!-- 日志log4j -->
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.12</version>
+    </dependency>
+</dependencies>
+```
+
+**Maven静态资源过滤**。防止资源导出失败的问题
+
+```xml
+<!-- Maven 资源过滤：防止资源导出失败的问题 -->
+<build>
+    <resources>
+        <resource>
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>true</filtering>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+</build>
+```
 
 
 
-## 编写核心配置
+### 1.2 编写核心配置
 
-### MyBatis配置文件
+#### 1）MyBatis配置文件
 
 MyBatis配置文件命名为 `mybatis-config.xml`，放在 `resources` 下。需要说明一点的是，mybatis配置文件中属性的放置位置是固定的，前后顺序不能改变。属性的顺序如下
 
@@ -54,7 +137,7 @@ MyBatis配置文件命名为 `mybatis-config.xml`，放在 `resources` 下。需
 properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers?
 ```
 
-比如，properties不能放在setting的后面，只能放在它前面。
+比如，`properties` 不能放在 `setting` 的后面，只能放在它前面。
 
  `mybatis-config.xml`的内容如下
 
@@ -102,9 +185,11 @@ properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFac
 </configuration>
 ```
 
-### 数据库配置文件
+#### 2）数据库配置文件
 
-数据库配置文件命名为 `database.properties`，放在 `resources` 下。自己创建的数据库名为myweb，用户名和密码修改为自己数据库的用户名和密码。
+配置数据库之前需要先连接本地数据库。路径：Database ==> + ==> Data Source => MySQL => 添加本地已经建好的数据库。
+
+数据库配置文件命名为 `database.properties`，放在 `resources` 下。自己创建的数据库名为 `myweb`，用户名和密码修改为自己数据库的用户名和密码。
 
 ```properties
 # 数据库配置文件
@@ -120,7 +205,7 @@ jdbc.password=123456
 jdbc.url=jdbc:mysql://localhost:3306/myweb?userSSL=false&userUnicode=true&characterEncoding=utf-8&serverTimeZone=UTC
 ```
 
-### 日志配置文件
+#### 3）日志配置文件
 
 日志配置文件命名为 `log4j.properties`，放在 `resources` 下。不需要日志的可以不配置。
 
@@ -137,7 +222,38 @@ log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
 
 写完项目所需要的配置，下面开始进行Mybatis对数据库的增删改查操作，以及相关测试。
 
-## 编写实体类
+## 2. 编写工具类
+
+通过Mybatis操作数据库之前，需要用到 `SqlSession`  ，所以将获取 `SqlSession` 抽取为一个单独的类 `MybatisUtils.java`，在之后需要` SqlSession` 时调用该类，而不用重复代码。
+
+```java
+public class MybatisUtils {
+    private static SqlSessionFactory sqlSessionFactory;
+
+    static {
+        try {
+            // 获取 SqlSessionFactory 对象
+            String resource = "mybatis-config.xml";
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 从 SqlSessionFactory 中获取 SqlSession 实例
+    public static SqlSession getSqlSession() {
+        return sqlSessionFactory.openSession();
+    }
+}
+```
+
+
+
+## 3. 编写实体类
+
+在 `src/main/java`  下创建包 `com/withered/pojo`， 在该包下创建实体类 `User.java`。
 
 这里以用户为例，创建实体类 `User`
 
@@ -154,7 +270,53 @@ public class User {
 
 
 
-## MyBatis中遇到的问题
+## 4. 编写Dao层
+
+在 `src/main/java`  下创建包 `com/withered/mapper`， 在该包下创建接口 `UserMapper.java` 以及 `UserMapper.xml`。
+
+`UserMapper.java`：dao层接口，包括数据库的增删改查。这里以查询全部数据为例。这个接口中我使用了模板 `T`， 因为之后想要创建一个dao层的公共接口，这样就不用每次都重新写一遍接口。
+
+```java
+public interface UserMapper<T> {
+    public List<T> getList();  // 查询全部数据
+}
+```
+
+`UserMapper.xml`：对应相应的dao层接口，编写sql语句。
+
+```xml
+<mapper namespace="com.withered.mapper.UserMapper">
+    <select id="getList" resultType="User">
+        select * from user;
+    </select>
+</mapper>
+```
+
+
+
+## 5. 测试
+
+在 `test/java` 下创建和 `src/main/java` 相同的结构，创建包 `com/withered/mapper` ，在该包下编写测试类 `UserMapperTest.java` ，测试mapper是否正确。
+
+```java
+public class UserMapperTest {
+    // 获取SqlSession对象
+    SqlSession sqlSession = MybatisUtils.getSqlSession();
+    // getMapper
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+    @Test
+    public void testGetList() {
+        List<User> list = mapper.getList();  // 从mapper中获取sql语句
+
+        for (User user: list) {
+            System.out.println(user);
+        }
+    }
+}
+```
+
+## 6. MyBatis中遇到的问题
 
 **MalformedByteSequenceException: 2 字节的  UTF-8 序列的字节 2 无效。**
 
@@ -172,7 +334,7 @@ mybatis配置文件（`mybatis-config.xml`）如下
 
 ![image-20210729221046687](https://gitee.com/withered-wood/picture/raw/master/20210729221055.png)
 
-**错误原因**：没有加载 数据库配置文件，我写的数据库配置文件命名为 database.properties
+**错误原因**：没有加载 数据库配置文件，我写的数据库配置文件命名为 `database.properties`
 
 **解决办法**：在mybatis配置文件（`mybatis-config.xml`）中，在最开头添加以下属性信息
 
