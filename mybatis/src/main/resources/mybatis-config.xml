@@ -7,7 +7,7 @@
     <!-- Mybatis配置文件。属性放置的前后顺序是固定的 -->
 
     <!-- 加载.properties文件-->
-    <properties resource="database.properties"/>
+    <properties resource="db.properties"/>
 
     <!-- 设置执行sql语句后打印结果 -->
     <settings>
@@ -30,7 +30,7 @@
 
     <mappers>
         <!-- 一次加载一个映射文件 -->
-        <mapper resource="com/com.withered/mapper/UserMapper.xml"/>
+        <mapper resource="com/withered/mapper/UserMapper.xml"/>
     </mappers>
 
 </configuration>

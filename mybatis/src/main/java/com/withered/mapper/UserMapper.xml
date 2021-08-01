@@ -30,7 +30,7 @@
         select * from myweb.user where name = #{name};
     </select>
 
-<!--    <select id="find" parameterType="java.util.Map" resultType="com.withered.pojo.User">-->
+<!--    <select id="find" parameterType="java.util.Map" resultType="com.User">-->
 <!--        select * from myweb.user where name = #{name};-->
 <!--    </select>-->
 

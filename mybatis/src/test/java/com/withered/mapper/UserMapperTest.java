@@ -1,16 +1,14 @@
 package com.withered.mapper;
 
+import com.withered.mapper.UserMapper;
 import com.withered.pojo.User;
 import com.withered.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserMapperTest {
     // 获取SqlSession对象
