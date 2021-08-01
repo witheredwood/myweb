@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- Mybatis配置文件，仅需关注性能化配置 -->
+
+    <!-- 加载.properties文件-->
+    <properties resource="db.properties"/>
+
+
+    <!-- 缓存的参数和日志 -->
+    <settings>
+        <!-- 打开延迟加载的开关 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!-- 将积极加载改为消极加载（即按需加载） -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!-- 打开全局缓存开关（二级缓存），默认值是true -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 设置执行sql语句后打印结果 -->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <!-- 别名定义。该路径下的Java实体类都可以拥有一个别名（即首字母小写的别名） -->
+    <typeAliases>
+        <package name="com.withered.pojo"/>
+    </typeAliases>
+
+    <!-- 加载映射文件 -->
+    <mappers>
+        <!-- 批量加载mapper -->
+        <package name="com.withered.dao"/>
+    </mappers>
+
+</configuration>
