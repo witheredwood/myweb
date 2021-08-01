@@ -1,0 +1,43 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!--<!DOCTYPE mapper-->
+<!--        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"-->
+<!--        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+
+
+<!--<mapper namespace="com.com.withered.dao.UserMapper">-->
+<!--    &lt;!&ndash; 插入 &ndash;&gt;-->
+<!--    <insert id="insert" parameterType="User">-->
+<!--        insert into myweb.user (name, age, sex)-->
+<!--        values (#{name}, #{age}, #{sex});-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 按id删除一个数据 &ndash;&gt;-->
+<!--    <delete id="deleteById" parameterType="java.io.Serializable">-->
+<!--        delete from myweb.user where name = #{name};-->
+<!--    </delete>-->
+
+<!--    &lt;!&ndash; 批量删除 &ndash;&gt;-->
+<!--&lt;!&ndash;    <delete id="delete" parameterType="java.io.Serializable[]">&ndash;&gt;-->
+<!--&lt;!&ndash;        delete from myweb.user where name = #{name};&ndash;&gt;-->
+<!--&lt;!&ndash;    </delete>&ndash;&gt;-->
+
+<!--    &lt;!&ndash; 修改 &ndash;&gt;-->
+<!--    <update id="update" parameterType="java.io.Serializable">-->
+<!--        update myweb.user-->
+<!--        set name = #{name}, age = #{age}, sex = #{sex}-->
+<!--        where name = #{name};-->
+<!--    </update>-->
+
+<!--    <select id="getById" parameterType="java.io.Serializable" resultType="User">-->
+<!--        select * from myweb.user where name = #{name};-->
+<!--    </select>-->
+
+<!--&lt;!&ndash;    <select id="find" parameterType="java.util.Map" resultType="User">&ndash;&gt;-->
+<!--&lt;!&ndash;        select * from myweb.user where name = #{name};&ndash;&gt;-->
+<!--&lt;!&ndash;    </select>&ndash;&gt;-->
+
+
+<!--    <select id="getList" resultType="User">-->
+<!--        select * from myweb.user;-->
+<!--    </select>-->
+
+<!--</mapper>-->

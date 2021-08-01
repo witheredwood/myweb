@@ -1,4 +1,4 @@
-# MyBatis和Spring MVC整合学习记录
+# MyBatis和Spring MVC整合学习记录(进行中)
 
 这个项目是使用Mybatis操作数据库的示例，本示例是关于Mybatis和Spring整合的部分。
 
