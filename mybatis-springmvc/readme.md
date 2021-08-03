@@ -436,7 +436,7 @@ public interface UserMapper {
 }
 ```
 
-2）**编写service层测试用例。**创建文件 `UserService.java` 和 `UserServiceImpl.xml` ，放在  `com/withered/service` 下。这里同样以测试查询某个用户信息为例。
+2）**编写service层测试用例。**创建文件 `UserService.java` 和 `UserServiceImpl.java` ，放在  `com/withered/service` 下。这里同样以测试查询某个用户信息为例。
 
 `UserService.java` 核心内容如下：
 
@@ -446,14 +446,22 @@ public interface UserService {
 }
 ```
 
-`UserServiceImpl.xml` 核心内容如下：
+`UserServiceImpl.java` 核心内容如下：
 
 ```java
-<mapper namespace="com.withered.dao.UserMapper">
-    <select id="getById" parameterType="java.lang.String" resultType="User">
-        select * from myweb.user where name = #{name};
-    </select>
-</mapper>
+@Service
+public class UserServiceImpl implements UserService {
+    private UserMapper mapper;
+
+    @Autowired
+    public void setMapper(UserMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public User getById(String id) {
+        return mapper.getById(id);
+    }
+}
 ```
 
 3）**编写controller层测试用例。**创建文件 `UserController.java`  ，放在  `com/withered/controller` 下。
@@ -509,14 +517,6 @@ public class UserController {
 **解决方法**：找到以下路径：setting ==>  Editor ==>  File Encoding。修改下图中的3个地方。（这个错误，真是遇到很多次，也不知道为啥。有时候要重启IDEA，有时候重启也不管用，只能新建个工程，写代码前改了。）
 
 ![image-20210729215626685](https://gitee.com/withered-wood/picture/raw/master/20210729215628.png)
-
-
-
-
-
-
-
-
 
 
 
