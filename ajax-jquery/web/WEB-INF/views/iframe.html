@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>iframe测试体验页面无刷新</title>
+
+</head>
+<body>
+
+<div>
+    <p>请输入地址：</p>
+    <p>
+        <input type="text" id="url" value="https://blog.csdn.net/qq_35439539?spm=1000.2115.3001.5343">
+        <!-- 点击 提交 按钮，会执行go函数 -->
+        <input type="button" value="提交" id="btn">
+    </p>
+</div>
+<div>
+    <iframe id="iframe" style="width: 100%;height: 500px"></iframe>
+</div>
+
+
+<script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // 点击提交按钮，会执行该事件
+    $("#btn").on("click", function () {
+        let url = $("#url").val();  // 获取输入框中的值
+       $("#iframe").attr("src", url);  // 修改属性值src
+    });
+
+</script>
+</body>
+</html>
