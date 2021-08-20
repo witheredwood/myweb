@@ -1,0 +1,11 @@
+<view class="appHeader">
+  <image class="logo" src="https://gw.alipayobjects.com/mdn/rms_10e969/afts/img/A*ok3MRJP0eRIAAAAAAAAAAABkARQnAQ" mode="aspectFit" />
+  <view class="titleMain">
+    <view class="titleWrap">
+      <slot name="title"></slot>
+    </view>
+    <view class="subTitleWrap">
+      <slot name="subTitle"></slot>
+    </view>
+  </view>
+</view>

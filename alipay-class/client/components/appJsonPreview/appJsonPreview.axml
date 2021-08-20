@@ -1,0 +1,3 @@
+<view a:if="sourceCode.length > 0" class="app-json-preview">
+  <rich-text class="rich-text" nodes="{{sourceCode}}"></rich-text>
+</view>

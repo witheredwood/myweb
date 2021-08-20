@@ -1,0 +1,35 @@
+page {
+  color: #333333;
+  background: #f7f7f7;
+}
+
+.content {
+  padding: 32rpx 0;
+  background: #fff;
+}
+
+.description {
+  padding: 40rpx 32rpx;
+  font-size: 32rpx;
+  line-height: 1.6;
+  color: #333333;
+  margin-top: -24rpx;
+  margin-bottom: 32rpx;
+  background: #fff;
+  word-break: break-all;
+}
+
+.description .row {
+  margin-top: 24rpx;
+}
+
+.try {
+  margin-top: 32rpx;
+  padding: 32rpx 32rpx 80rpx;
+  background: #fff;
+}
+
+.word-wrap {
+  word-wrap: break-word;
+}
+

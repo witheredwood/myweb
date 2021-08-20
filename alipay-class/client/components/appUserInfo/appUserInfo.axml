@@ -1,0 +1,4 @@
+<view class="appUserInfo {{className}}">
+  <view>昵称：{{nickName}}</view>
+  <view class="avatar">头像：<app-image url="{{avatarUrl}}" mode="scaleToFill" /></view>
+</view>

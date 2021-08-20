@@ -1,0 +1,8 @@
+{
+  "defaultTitle": "账号",
+  "usingComponents": {
+    "avatar": "mini-ali-ui/es/avatar/index",
+    "list": "mini-ali-ui/es/list/index",
+    "list-item": "mini-ali-ui/es/list/list-item/index"
+  }
+}

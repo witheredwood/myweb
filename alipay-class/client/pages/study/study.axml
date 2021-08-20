@@ -1,0 +1,22 @@
+<view>
+  <title>我的课程</title>
+
+  <view class="list-container" a:for="{{courseList}}">
+    <view class="list-item" onTap="toDetail" data-arg="{{item.title}}">
+        <image mode="aspectFit" src="{{item.titleImage}}"/>
+      <view class="list-right">
+        <text class="list-text">{{item.title}}</text>
+      </view>
+    </view>
+    <!-- 分割线 -->
+    <view class="line-container">
+      <view class="home-header-line"></view>
+    </view>
+  </view>
+
+  <!-- <view class="list-container" a:else>
+      <text class="list-text">您还没有加入任何学习课程哦</text>
+  </view> -->
+
+  <footer type="end" content="我是底线哦"/>
+</view>

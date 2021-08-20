@@ -1,0 +1,26 @@
+<view class="appStep">
+  <view class="step-header">
+    <view>
+      <text a:for="{{data}}" class="{{ current === index ? 'step-header-item-selected' : 'step-header-item' }}">
+        {{ index + 1 }}
+      </text>
+    </view>
+  </view>
+  <view class="step-content">
+    <view class="step-content-item">
+      <slot name="content" />
+      <slot name="try" />
+    </view>
+  </view>
+  <view class="step-footer">
+    <view hidden="{{current === 0}}" class="back" onTap="onPreviousStep">
+      <am-icon type="arrow-left" size="{{14}}"/> 上一步
+    </view>
+    <view hidden="{{!data[current].visibleNext}}" onTap="onNextStep">
+      {{current === data.length - 1 ? "完成" : "下一步"}}
+      <block a:if="{{current < data.length - 1}}">
+        <am-icon type="arrow-right" size="{{14}}" color="#1e94eb" />
+      </block>
+    </view>
+  </view>
+</view>

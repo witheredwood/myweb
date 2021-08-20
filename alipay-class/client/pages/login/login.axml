@@ -1,0 +1,9 @@
+<view>
+  <button class="loginbtn" type="primary" 
+          open-type="getAuthorize"  
+          onGetAuthorize="onGetAuthorize" 
+          onError="onAuthError"  scope='userInfo'  
+          data-arg="{{userinfo}}">
+    支付宝一键登录
+  </button>
+</view>

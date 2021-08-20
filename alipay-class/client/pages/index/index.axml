@@ -1,0 +1,14 @@
+<view class="body">
+  <view class="classes-container">
+    <view>精品好课</view>
+    <view class="flex-container">
+      <flex wrap="wrap" class="flex-item">
+          <view class="intro" a:for="{{courseinfo}}" onTap="toDetail" data-arg="{{item.title}}">
+              <image mode="aspectFit" class="placeholder" src="{{item.titleImage}}"/>
+              <text>{{item.title}}</text>
+          </view>
+      </flex>
+    </view>
+  </view>
+
+</view>

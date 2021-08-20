@@ -1,0 +1,23 @@
+.appUserInfo {
+  background-color: #f0f0f0;
+  padding: 32rpx;
+}
+
+.appUserInfo > view {
+  line-height: 48rpx;
+}
+
+.appUserInfo .avatar {
+  display: flex;
+  align-items: flex-start;
+  margin: 24rpx 0 0;
+}
+
+.appUserInfo .avatar view {
+  display: inline-block;
+}
+
+.appUserInfo .avatar image {
+  width: 145rpx;
+  height: 145rpx;
+}

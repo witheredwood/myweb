@@ -1,0 +1,8 @@
+<view class="appPanel {{className}}">
+  <block a:if="{{title !== ''}}">
+    <view class="title">{{title}}</view>
+  </block>
+  <view class="appPanelContent">
+    <slot />
+  </view>
+</view>

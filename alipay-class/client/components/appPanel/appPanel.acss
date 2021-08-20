@@ -1,0 +1,26 @@
+.appPanel {
+  margin-top: 48rpx;
+  padding: 0 32rpx;
+}
+
+.appPanel:first-child {
+  margin-top: 0;
+}
+
+.appPanel .title {
+  display: inline-block;
+  font-size: 36rpx;
+  color: #151515;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.appPanel .appPanelContent .row {
+  font-size: 32rpx;
+  line-height: 62rpx;
+  margin-bottom: 24rpx;
+}
+
+.appPanel .appPanelContent .row:last-child {
+  margin-bottom: 0;
+}

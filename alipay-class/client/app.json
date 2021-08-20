@@ -1,0 +1,41 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/my",
+    "pages/detail/detail",
+    "pages/study/study",
+    "pages/login/login"
+  ],
+  "window": {
+    "defaultTitle": "课堂demo",
+    "allowsBounceVertical": "NO",
+    "titleBarColor": "#fff",
+    "titlePenetrate": "YES",
+    "showTitleLoading": "YES"
+  },
+  "tabBar": {
+    "textColor": "#333333",
+    "selectedColor": "#009D9A",
+    "backgroundColor": "#f2f2f2",
+    "items": [
+      {
+        "pagePath": "pages/index/index",
+        "icon": "/static/icon/home.png",
+        "activeIcon": "/static/icon/home-filling.png",
+        "name": "首页"
+      },
+      {
+        "pagePath": "pages/study/study",
+        "icon": "/static/icon/book.png",
+        "activeIcon": "/static/icon/book-filling.png",
+        "name": "我的学习"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "icon": "/static/icon/user.png",
+        "activeIcon": "/static/icon/user-filling.png",
+        "name": "个人中心"
+      }
+    ]
+  }
+}

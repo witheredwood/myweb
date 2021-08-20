@@ -1,0 +1,7 @@
+.appImage {
+  margin-top: 20rpx;
+}
+
+.appImage .image {
+  width: 100%;
+}

@@ -1,0 +1,17 @@
+{
+  "usingComponents": {
+    "container": "mini-ali-ui/es/container/index",
+    "flex": "mini-ali-ui/es/flex/index",
+    "flex-item": "mini-ali-ui/es/flex/flex-item/index",
+    "tabs": "mini-ali-ui/es/tabs/index",
+    "tab-content": "mini-ali-ui/es/tabs/tab-content/index",
+    "am-icon": "mini-ali-ui/es/am-icon/index",
+
+
+    "app-header": "/components/appHeader/index",
+    "list": "mini-antui/es/list/index",
+    "list-item": "mini-antui/es/list/list-item/index",
+    "app-page-footer": "/components/appPageFooter/appPageFooter"
+  },
+  "titleBarColor": "#118eea"
+}

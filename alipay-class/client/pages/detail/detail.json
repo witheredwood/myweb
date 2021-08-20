@@ -1,0 +1,12 @@
+{
+  "defaultTitle": "课程详情",
+  "usingComponents": {
+    "tabs": "mini-ali-ui/es/tabs/index",
+    "tab-content": "mini-ali-ui/es/tabs/tab-content/index",
+    "avatar": "mini-ali-ui/es/avatar/index",
+    "list": "mini-ali-ui/es/list/index",
+    "list-item": "mini-ali-ui/es/list/list-item/index",
+    "footer": "mini-ali-ui/es/footer/index"
+  }
+
+}

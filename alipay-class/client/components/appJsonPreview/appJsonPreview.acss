@@ -1,0 +1,23 @@
+.json-wrap {
+  color: #fff;
+  background: #1f1f29;
+  padding: 20rpx 30rpx;
+  border-radius: 2px;
+  margin: 0;
+}
+
+.json-list {
+  padding: 0 30rpx;
+}
+
+.json-item {
+  margin: 0;
+  line-height: 1.6;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.rich-text {
+  max-height: 500rpx;
+  overflow: auto;
+}

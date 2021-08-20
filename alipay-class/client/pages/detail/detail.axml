@@ -1,0 +1,83 @@
+<view>
+  <!-- 这是课程详情页面 -->
+
+  <view class="content">
+    <image mode="aspectFit" class="short-image" src="{{courseinfo.titleImage}}"/>
+
+    <tabs tabs="{{tabs}}"
+      tabsName="activeTab"
+      onTabClick="handleTabClick"
+      onChange="handleTabChange"
+      activeTab="{{activeTab}}"
+      swipeable="{{false}}"
+      tabBarUnderlineWidth="20px"
+      tabContentHeight= "130px"
+      stickyBar="{{true}}">
+
+      <!-- 简介 -->
+      <block a:for="{{tabs}}">
+        <tab-content key="{{index}}" tabId="{{index}}" activeTab="{{activeTab}}" a:if="{{index === 0}}">
+          <view class="tab-content">
+            <view class="item-title">{{courseinfo.title}}</view>
+            <!-- 分割线 -->
+            <view class="line-container">
+              <view class="home-header-line"></view>
+            </view>
+            <view class="item-content">
+              <view class="detail-title">课程介绍</view>
+              <image mode="widthFix" class="long-image" src="{{courseinfo.introImage}}" a:if="{{courseinfo.introImage}}"/>
+              <view class="content-text" a:if="{{courseinfo.introText}}">{{courseinfo.introText}}</view>
+            </view>
+            <!-- 分割线 -->
+            <view class="line-container">
+              <view class="home-header-line"></view>
+            </view>
+
+            <view lass="item-content">
+              <view class="detail-title">使用人群</view>
+              <view class="content-text">{{courseinfo.crowd}}</view>
+            </view>
+            <!-- 分割线 -->
+            <view class="line-container">
+              <view class="home-header-line"></view>
+            </view>
+
+          <view class="item-content">
+              <view class="detail-title">讲师</view>
+              <view>
+                <avatar src="{{courseinfo.icon}}" size="md" name="{{courseinfo.teacher}}"/>
+              </view>
+          </view>
+      
+          </view>
+        </tab-content>
+
+
+        <!-- 目录 -->
+        <tab-content key="{{index}}" tabId="{{index}}" activeTab="{{activeTab}}" a:else>
+          <list class="list">
+            <view class="menu-info">课程已完更</view>
+            <block a:for="{{listItems}}">
+              <list-item arrow="{{item.arrow}}" index="{{index}}" key="items-{{index}}" last="{{index === (items.length - 1)}}">
+                <view>{{item.title}}</view>
+                <!-- <navigator url="{{item.url}}">{{item.title}}</navigator> -->
+              </list-item>
+            </block>
+          </list>
+        </tab-content>
+
+      </block>
+    </tabs>
+  </view>
+  
+<button class="btn" size="default" type="primary" onTap="addToMy" a:if="{{isStudy === false}}">加入学习</button>
+<button class="btn" size="default" type="ghost" disabled a:else>已加入学习</button>
+
+
+
+    <!-- <footer 
+      type="normal" 
+      content="底部文案置底说明"
+    /> -->
+
+</view>

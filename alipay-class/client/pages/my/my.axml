@@ -1,0 +1,12 @@
+<view>
+  <view class="user-profile" onTap="toLogin">
+    <avatar src="{{avatar}}" size="md" name="{{nickName}}"/>
+  </view>
+  
+  <list>
+    <list-item onClick="onShare">分享</list-item>
+  </list>
+    
+    <!-- <list-item><navigator class="but" target="my" open-type='exit'>退出账号</navigator></list-item> -->
+
+</view>

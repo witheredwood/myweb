@@ -1,0 +1,77 @@
+.body {
+  background-color: #bbb;
+}
+
+.classes-container {
+ padding: 10px;
+ margin-top: 10px;
+ /* background-color:lightseagreen; */
+ background-color:white;
+  /* background-color:ghostwhite; */
+}
+
+/* .flex-container {
+ padding: 10px;
+} */
+
+.placeholder {
+ /* background-color: #ebebef; */
+ color: #bbb;
+ height: 100px;
+ line-height: 30px;
+ width: 100%;
+}
+
+/* .placeholder.inline { */
+ /* width: 80px; */
+  /* width: 45%;
+  margin: 9px 5% 9px 0; */
+  /* margin: 9px 2.5% 9px 2.5%; */
+ /* margin: 9px 9px 9px 0; */
+/* } */
+
+.flex-item {
+    align-items: baseline;  /* 子视图顶端对齐 */
+}
+
+.intro {
+  height:auto;
+  width: 45%;
+  margin: 9px 5% 9px 0;
+  vertical-align: top;
+}
+
+/* .placeholder.small {
+ height: 20px;
+ line-height: 20px
+} */
+
+/* .container {
+  margin-bottom: 24rpx;
+  width: 50%;
+} */
+
+/* .left {
+  float: left;
+} */
+
+/* .right {
+  float: right;
+} */ 
+
+/* .list {
+	margin-top: 20rpx;
+	font-size: 34rpx;
+}
+
+.list navigator {
+  display: inline-block;
+  width: 100%;
+}
+
+.abilitytitle {
+  margin-left: 30rpx;
+  margin-bottom: 10rpx;
+  color: #999999;
+	font-size: 28rpx;
+} */

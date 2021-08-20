@@ -1,0 +1,23 @@
+<view class="aliyunsms">
+
+  <view>
+    bizId: {{bizId}}
+      </view>
+    <view>
+          发送结果： {{result}}
+    </view>
+
+
+  <view class="try">
+    <view class="cetify">
+    </view>
+     <app-try name="短信发送" onTry="sendSms">
+    </app-try>
+     <app-try name="短信批量发送" onTry="sendBatchSms">
+    </app-try>
+     <app-try name="短信查询" onTry="querySendDetails">
+    </app-try>
+       <app-try name="短信查询(Bizid)" onTry="querySendDetailsWithBizid">
+    </app-try>
+  </view>
+</view>

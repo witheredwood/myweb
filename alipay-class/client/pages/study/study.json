@@ -1,0 +1,9 @@
+{
+  "defaultTitle": "我的学习",
+  "usingComponents": {
+    "title": "mini-ali-ui/es/title/index",
+    "flex": "mini-ali-ui/es/flex/index",
+    "flex-item": "mini-ali-ui/es/flex/flex-item/index",
+    "footer": "mini-ali-ui/es/footer/index"
+  }
+}

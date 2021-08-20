@@ -1,0 +1,12 @@
+{
+  "defaultTitle": "阿里云短信",
+  "usingComponents": {
+    "app-step": "/components/appStep/appStep",
+    "app-try": "/components/appTry/appTry",
+    "app-json-preview": "/components/appJsonPreview/appJsonPreview",
+    "app-panel": "/components/appPanel/appPanel",
+    "app-text-bold": "/components/appTextBold/appTextBold",
+    "app-image": "/components/appImage/appImage"
+  }
+  
+}

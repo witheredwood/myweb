@@ -1,0 +1,18 @@
+.appTry .experienceTitle {
+  margin-top: 24rpx;
+  display: inline-block;
+  font-size: 36rpx;
+  color: #151515;
+  font-weight: bold;
+  margin-bottom: 24rpx;
+}
+
+.appTry .experienceContent {
+  margin-bottom: 48rpx;
+}
+
+.appTry .btnOperate {
+  font-size: 36rpx;
+  height: 94rpx;
+  line-height: 94rpx;
+}

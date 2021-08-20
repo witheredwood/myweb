@@ -1,0 +1,11 @@
+.appPageFooter {
+	padding: 32rpx 32rpx 40rpx;
+	color: #999999;
+	font-size: 28rpx;
+	line-height: 1.6;
+}
+
+.appPageFooter .link {
+	display: inline;
+	color: #108EE9;
+}
