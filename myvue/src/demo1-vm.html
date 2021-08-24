@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo1-vm</title>
+</head>
+<body>
+
+<div id="app">
+    {{message}}
+</div>
+
+<!-- 导入vue.js -->
+
+<!-- umpkg 国外cdn，与npm保持一致 -->
+<!--<script src="https://unpkg.com/vue/dist/vue.min.js"></script>-->
+
+<!-- staticfile 国内cdn -->
+<script src=" https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script>
+
+    /* 创建一个vue对象 */
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            message: "hello, vue!"
+        }
+    });
+</script>
+
+
+</body>
+</html>

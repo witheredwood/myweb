@@ -1,0 +1,16 @@
+<template>
+    <div>
+        <h1>个人信息</h1>
+    </div>
+</template>
+
+<script>
+    export default {
+      props: ['id', 'name'],
+      name: 'UserProfile',
+    }
+</script>
+
+<style scoped>
+
+</style>

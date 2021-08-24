@@ -1,7 +1,0 @@
-.content .content-image {
-  max-width: 100%;
-}
-
-.content .red{
-  color: #F5222D;
-}

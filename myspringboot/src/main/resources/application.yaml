@@ -1,29 +1,6 @@
-person:
-  name: zs
-  age: 3
-  ishappy: true
-  birth: 2021/08/11
-  maps: {k1: v1,k2: v2}
-  lists: [a,b,c]
-  dog:
-    name: ls
-    age: 3
-
-
-## 普通的key-value
-#name: zs
-#
-## 对象
-#student:
-#  name: zs
-#  age: 3
-#
-#person: {name: zs,age: 3}
-#
-## 数组
-#pets:
-#  - dog
-#  - cat
-#  - pig
-#
-#pet: [dog,cat,pig]
+spring:
+  datasource:
+    username: root
+    password: 1234567
+    url: jdbc:mysql://localhost:3306/myweb?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver

@@ -1,8 +1,6 @@
-import { myconfig } from '../../utils/myutil'
 
 Page({
   data: {
-    ...myconfig,
     nickName: '登录',
     avatar: '/static/icon/tx.jpg',
   },

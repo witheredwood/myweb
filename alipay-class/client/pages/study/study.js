@@ -1,4 +1,3 @@
-import { myconfig } from '../../utils/myutil'
 
 Page({
   data: {

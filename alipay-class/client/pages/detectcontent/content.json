@@ -1,9 +1,0 @@
-{
-  "defaultTitle": "文本风险识别",
-  "usingComponents": {
-    "app-image": "/components/appImage/appImage",
-    "app-try": "/components/appTry/appTry",
-    "app-panel": "/components/appPanel/appPanel",
-    "app-text-bold": "/components/appTextBold/appTextBold"
-  }
-}

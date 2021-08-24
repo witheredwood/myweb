@@ -3,4 +3,3 @@
  */
 export * from './log';
 export * from './common';
-export * from './myutil';
