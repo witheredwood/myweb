@@ -469,7 +469,7 @@ private String dateTime;
 
 
 
-## 数据库
+## 数据库 Mysql（重点）
 
 在项目中配置了MySql数据库，这里测试了使用JDBC连接和操作数据库。
 
@@ -574,7 +574,158 @@ public class JdbcController {
 }
 ```
 
+## 整合 Druid 数据源
 
+查找依赖地址：[MavenRepositor](https://mvnrepository.com/) 。druid依赖地址：https://mvnrepository.com/artifact/com.alibaba/druid/1.2.6
 
+### 导入依赖
 
+```xml
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.2.6</version>
+</dependency>
+```
+
+在 `application.yaml` 中设置数据源
+
+```yaml
+spring:
+  datasource:
+    username: root
+    password: 1234567
+    url: jdbc:mysql://localhost:3306/myweb?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+```
+
+到这，就可以使用Druid数据源了。重新测试数据库连接，可以看到使用的数据源是Druid数据源。
+
+###  配置Druid数据源
+
+此外，还可以在 `application.yaml` 中配置 Druid 数据源的专有配置，还可以配置druid的监控功能。
+
+**Druid专有配置**
+
+```yaml
+    # druid 专有配置
+    initialsize: 5
+    minIdle: 5
+    maxActive: 20
+    maxwait: 60000
+    timeBetweenEvictionRunsMillis: 6000
+    eminEvictableIdleTimeMi1lis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testwhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+```
+
+**Druid监控功能**
+
+```yaml
+    # 配置监控统计拦截的filters：stat(监控统计)、log4j(日志记录)、wall(防御sql注入)
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+```
+
+这个监控功能用到了 log4j ，所以需要导入 log4j 依赖
+
+```xml
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.17</version>
+</dependency>
+```
+
+### druid配置类
+
+springboot 内置了servlet 容器，所以没有 `web.xml` ，可以用替代类。
+
+```java
+package com.withered.config;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.support.http.StatViewServlet;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@Configuration
+public class DruidConfig {
+
+    // 绑定yaml中的属性，需要以下两步。
+    // 1. @Bean 
+    // 2. @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    @Bean
+    public DataSource druidDataSource() {
+        return new DruidDataSource();
+    }
+
+    // 后台监控功能
+    @Bean
+    public ServletRegistrationBean statViewServlet() {
+        // 默认监控页面
+        ServletRegistrationBean<StatViewServlet> bean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
+        
+        // 后台需要有人登录，配置账户密码
+        Map<String, String> initParameters = new HashMap<>();
+        // 增加配置
+        initParameters.put("LoginUsername", "admin");  // 登录key，是固定的LoginUsername
+        initParameters.put("LoginPassword", "123456");  // 登录key，是固定LoginPassword
+        // 允许谁能访问
+        initParameters.put("allow", "");  // ""-允许所有人访问；"localhost"-允许本机访问
+        // 禁止谁访问
+        initParameters.put("someone", "xxx.xxx.xxx.xxx");  // xxx.xxx.xxx.xxx - ip地址
+
+        bean.setInitParameters(initParameters);  // 初始化参数
+        return bean;
+    }
+    
+     
+    // 过滤器filter。过滤掉一些请求，不进行统计
+    public FilterRegistrationBean web() {
+        FilterRegistrationBean bean = new FilterRegistrationBean<>();
+        bean.setFilter(new WebStatFilter());
+
+        // 过滤哪些请求
+        Map<String, String> initParameters = new HashMap<>();
+        initParameters.put("exclusions", "*.js,*.css,/druid/*");  // 这些不进行统计
+        
+        bean.setInitParameters(initParameters);
+        return bean;
+    }
+
+}
+```
+
+启动项目，在浏览器中输入 `http://localhost/druid` ，就可以看到 druid 的监控页面。
+
+<img src="https://gitee.com/withered-wood/picture/raw/master/20210918155806.png" alt="image-20210918155805127" style="zoom:80%;" />
+
+## 整合Mybatis框架
+
+### 导入整合包依赖
+
+查询依赖地址：https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter/2.2.0
+
+```xml
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.2.0</version>
+</dependency>
+
+```
 

@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.withered.mapper.UserMapper">
+    <select id="get" resultType="User">
+		select * from myweb.user
+	</select>
+    <select id="getUserById" parameterType="int" resultType="User">
+		select * from myweb.user where
+	</select>
+</mapper>

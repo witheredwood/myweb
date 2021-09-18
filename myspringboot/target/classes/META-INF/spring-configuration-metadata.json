@@ -4,6 +4,12 @@
       "name": "person",
       "type": "com.withered.pojo.Person",
       "sourceType": "com.withered.pojo.Person"
+    },
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.withered.config.DruidConfig",
+      "sourceMethod": "druidDataSource()"
     }
   ],
   "properties": [
