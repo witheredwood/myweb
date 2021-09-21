@@ -2,6 +2,7 @@ package com.withered.mapper;
 
 import com.withered.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,5 +10,4 @@ import java.util.List;
 public interface UserMapper {
     List<User> get();
     User getUserById(int id);
-
 }
