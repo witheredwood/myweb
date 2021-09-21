@@ -2,8 +2,6 @@ package com.withered.mapper;
 
 import com.withered.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Mapper  // 表明这是一个mabatis 的 mapper 类
