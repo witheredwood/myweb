@@ -1,3 +1,4 @@
+# 数据库
 spring:
   datasource:
     username: root
@@ -8,4 +9,4 @@ spring:
 # 整合mybatis
 mybatis:
   type-aliases-package: com.withered.pojo
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml

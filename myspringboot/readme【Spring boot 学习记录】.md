@@ -744,10 +744,11 @@ public class DruidConfig {
     <artifactId>mybatis-spring-boot-starter</artifactId>
     <version>2.2.0</version>
 </dependency>
-
 ```
 
 **Step2 编写 mapper 接口**
+
+mapper接口的路径：`java/com/withered/mapper/UserMapper`
 
 ```java
 @Mapper  // 表明这是一个mabatis 的 mapper 类
@@ -757,9 +758,9 @@ public interface UserMapper {
 }
 ```
 
-Step3 编写 sql 语句
+**Step3 编写 sql 语句**
 
-在 `resources` 下创建文件 `UserMapper.xml` ，路径为 `resources/mybatis/mapper/UserMapper.xml` 。
+在 `resources` 下创建文件 `UserMapper.xml` ，路径为 `resources/mapper/UserMapper.xml` 。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -782,10 +783,60 @@ Step3 编写 sql 语句
 在 `application.yaml` 中添加整合 mybatis 的设置， `classpath:` 表示当前文件所在的文件夹。
 
 ```yaml
+# 数据库
+spring:
+  datasource:
+    username: root
+    password: 1234567
+    url: jdbc:mysql://localhost:3306/myweb?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+# 整合mybatis
 mybatis:
   type-aliases-package: com.withered.pojo
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml
 ```
+
+**Step5 控制层测试**
+
+编写控制层类 `UserController` ，路径：`java/com/withered/controller/UserController` 。
+
+```java
+
+import com.withered.mapper.UserMapper;
+import com.withered.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+
+@RestController
+public class UserController {
+    @Autowired
+    private UserMapper userMapper;
+
+    // 查询数据库所有数据
+    @GetMapping("/get")
+    public List<User> get() {
+        System.out.println("get() ------------ ");
+        List<User> list = userMapper.get();
+        return list;
+    }
+
+    @GetMapping("/getById")
+    public User getById() {
+        System.out.println("getById() ------------ ");
+        User user = userMapper.getUserById(2);
+        return user;
+    }
+}
+```
+
+**Step6 启动**
+
+启动 `MybatisApplication` 类，在地址栏输入 `http://localhost:8080/get` ，就可以在页面看到数据库中的数据的字符串。
 
 ## SpringSecurity环境搭建
 
