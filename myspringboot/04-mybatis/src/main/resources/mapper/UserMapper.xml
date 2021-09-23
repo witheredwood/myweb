@@ -5,9 +5,9 @@
 
 <mapper namespace="com.withered.mapper.UserMapper">
     <select id="get" resultType="User">
-		select * from myweb.user
-	</select>
+        select * from myweb.user
+    </select>
     <select id="getUserById" resultType="User">
-		select * from myweb.user where id = #{id}
-	</select>
+        select * from myweb.user where id = #{id}
+    </select>
 </mapper>

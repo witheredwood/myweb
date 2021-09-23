@@ -6,6 +6,7 @@
     <modules>
         <module>shiro</module>
         <module>druid</module>
+        <module>06-shiro</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

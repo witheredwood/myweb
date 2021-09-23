@@ -1003,6 +1003,8 @@ Shiro可以完成，认证，授权，加密，会话管理，Web集成，缓存
 
 [Github地址](https://github.com/apache/shiro.git)
 
+Shiro 三个重要的部分： Subject、SecurityManager、Realm。
+
 ### 快速开始
 
 将GitHub上的 `QuickStart` 例子复制到本地的项目中，并启动。
@@ -1232,5 +1234,216 @@ currentUser.logout();  // 注销
 **Step1 导入依赖**
 
 ```xml
+<!-- shiro整合包 -->
+<dependency>
+    <groupId>org.apache.shiro</groupId>
+    <artifactId>shiro-spring-boot-web-starter</artifactId>
+    <version>1.8.0</version>
+</dependency>
 ```
+
+在包 `java/com/withered/config` 下创建两个类， `ShiroConfig` 和 `UserRealm` 。
+
+`ShiroConfig` ：自定义Shiro配置。 其中需要的 Realm 对象，要自定义。所以，`UserRealm` ，是自定义的Realm对象。
+
+**Step2 自定义 Realm **
+
+先创建好 `ShiroConfig` 所需要的自定义的 Realm 对象， 内容如下：
+
+```java
+package com.withered.config;
+
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+
+// 自定义realm
+public class UserRealm extends AuthorizingRealm {
+    // 授权
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        System.out.println("执行了 ==> 授权 doGetAuthorizationInfo");
+        return null;
+    }
+    // 认证
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        System.out.println("执行了 ==> 认证 doGetAuthenticationInfo");
+        return null;
+    }
+}
+```
+
+**Step3 自定义配置**
+
+`ShiroConfig` 总共有3个部分：
+
+- 创建一个realm对象；
+- 创建安全管理器 `DefaultWebSecurityManager` ；
+- 创建过滤器配置 `ShiroFilterFactoryBean` ；
+
+如何使用spring的bean对象？
+
+bean对象需要通过参数的方式使用，同时使用 `@Qualifier()`  指定注入哪个对象。
+
+
+
+完整代码如下：
+
+```java
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@Configuration
+public class ShiroConfig {
+
+    // Step3 创建ShiroFilterFactoryBean
+    @Bean(name="shiroFilterFactoryBean")
+    public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager defaultWebSecurityManager) {
+        ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
+        bean.setSecurityManager(defaultWebSecurityManager);  // 设置安全管理器
+        return bean;
+    }
+
+    // Step2 创建DefaultWebSecurityManager
+    @Bean(name="securityManager")
+    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("userRealm") UserRealm userRealm) {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(userRealm);  // 关联 realm
+        return securityManager;
+    }
+
+    // Step1 创建一个realm对象，需要自定义类
+    @Bean
+    public UserRealm userRealm() {
+        return new UserRealm();
+    }
+}
+```
+
+
+
+### 登录拦截
+
+可以在过滤器配置 `ShiroFilterFactoryBean` 中添加内置的过滤器：
+
+- `anon` ：无需认证就可以访问
+- `authc` ：必须认证了才能让问
+- `user` ：必须拥有记住我功能才能用
+- `perms`  ：拥有对某个资源的权限才能访问;
+- `role` ：拥有某个角色权限才能访问
+
+测试的效果是：从首页进入到两个不同的功能页面。实现的拦截效果是没有登录认证，从首页点击功能页面链接会跳转到登录页面。登录拦截设置如下：
+
+```java
+@Bean(name="shiroFilterFactoryBean")
+public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager defaultWebSecurityManager) {
+    ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
+    bean.setSecurityManager(defaultWebSecurityManager);  // 设置安全管理器
+
+    // 添加内置过滤器
+    Map<String, String>  filterMap = new LinkedHashMap<>();
+   	// 拦截
+    filterMap.put("/user/*", "authc");
+    bean.setFilterChainDefinitionMap(filterMap);
+    bean.setLoginUrl("/login");  // 设置登录请求
+
+    return bean;
+}
+```
+
+启动服务器测试是否拦截成功，需要添加一些测试的页面进行测试。下面是测试用到的页面和请求。
+
+**测试**
+
+1）添加thymeleaf模板依赖：
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+2）测试页面
+
+在 `resources/templates` 下创建以下要测试的页面：`index.html` ，`login.html` ，`user/add.html` ，`user/update.html`。
+
+`index.html` ：首页。
+
+```html
+<body>
+    <h1>首页</h1>
+    <h2>hello，shiro</h2>
+    <p th:text="${msg}"></p>
+    <hr>
+    <a th:href="@{/user/add}">add</a> | <a th:href="@{/user/update}">update</a>
+</body>
+```
+
+`login.html` ：登录页面。
+
+```html
+<body>
+    <h1>登录</h1>
+    <form action="">
+        <p>用户名：<input type="text" name="username"></p>
+        <p>密  码：<input type="text" name="password"></p>
+        <p><input type="submit" name="password"></p>
+    </form>
+</body>
+```
+
+`user/add.html` ：user 文件夹下的添加页面。
+
+```html
+<body>
+    <h1>添加</h1>
+</body>
+```
+
+`user/update.html` ：user 文件夹下的修改页面。
+
+```html
+<body>
+    <h1>更新</h1>
+</body>
+```
+
+3）controller 处理请求
+
+```java
+@Controller
+public class RouterController {
+    @RequestMapping({"/", "/index"})
+    public String index() {
+        return "index";
+    }
+
+    @RequestMapping("/user/add")
+    public String add() {
+        return  "user/add";
+    }
+    @RequestMapping("/user/update")
+    public String update() {
+        return  "user/update";
+    }
+
+    @RequestMapping("/toLogin")
+    public String toLogin() {
+        return  "login";
+    }
+}
+```
+
+### 用户认证
 
