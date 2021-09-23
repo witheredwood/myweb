@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
+// druid配置类，可以自定义一些配置
 @Configuration
 public class DruidConfig {
 

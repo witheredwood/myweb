@@ -16,8 +16,8 @@ public class JdbcController {
 
     // 不写实体类， 获取数据库中的数据
     // 查询数据库所有数据
-    @GetMapping("/find")
-    public List<Map<String, Object>> find() {
+    @GetMapping("/get")
+    public List<Map<String, Object>> get() {
         String sql = "select * from myweb.user";
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
         return list;

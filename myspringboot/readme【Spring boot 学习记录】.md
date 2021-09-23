@@ -588,6 +588,12 @@ public class JdbcController {
     <artifactId>druid</artifactId>
     <version>1.2.6</version>
 </dependency>
+<!-- 日志 log4j -->
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.17</version>
+</dependency>
 ```
 
 ###  配置Druid数据源
@@ -605,6 +611,12 @@ spring:
 ```
 
 到这，就可以使用Druid数据源了。重新测试数据库连接，可以看到使用的数据源是Druid数据源。
+
+```
+2021-09-23 08:55:46.481  INFO 1604 --- [nio-8080-exec-1] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+
+2021-09-23 08:55:46,592 DEBUG [druid.sql.Statement] - {conn-10005, stmt-20000, rs-50000} query executed. 105.9726 millis. select * from myweb.user 
+```
 
 此外，还可以在 `application.yaml` 中配置 Druid 数据源的专有配置，还可以配置druid的监控功能。
 
@@ -635,19 +647,21 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 ```
 
-这个监控功能用到了 log4j ，所以需要导入 log4j 依赖
+**Step5 设置日志**
 
-```xml
-<dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
-</dependency>
+druid 用到了 log4j ，所以需要配置日志文件 `log4j.properties`，以在控制台输出日志信息。
+
+```properties
+log4j.rootLogger=DEBUG, stdout
+# 控制台输出
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d %p [%c] - %m %n
 ```
 
 ### druid配置类
 
-**Step5 druid配置类（可选）**
+**Step6 druid配置类（可选）**
 
 springboot 内置了servlet 容器，所以没有 `web.xml` ，可以用替代类。
 
