@@ -4,7 +4,7 @@ javaweb：独立开发MVC网站
 
 ssm：框架
 
-war：tomcat运行
+war：tomcat运行4
 
 
 
@@ -580,6 +580,8 @@ public class JdbcController {
 
 ### 导入依赖
 
+**Step1 导入druid数据源依赖**
+
 ```xml
 <dependency>
     <groupId>com.alibaba</groupId>
@@ -588,7 +590,9 @@ public class JdbcController {
 </dependency>
 ```
 
-在 `application.yaml` 中设置数据源
+###  配置Druid数据源
+
+**Step2 在 `application.yaml` 中设置数据源**
 
 ```yaml
 spring:
@@ -602,11 +606,9 @@ spring:
 
 到这，就可以使用Druid数据源了。重新测试数据库连接，可以看到使用的数据源是Druid数据源。
 
-###  配置Druid数据源
-
 此外，还可以在 `application.yaml` 中配置 Druid 数据源的专有配置，还可以配置druid的监控功能。
 
-**Druid专有配置**
+**Step3 Druid专有配置（可选）**
 
 ```yaml
     # druid 专有配置
@@ -623,7 +625,7 @@ spring:
     poolPreparedStatements: true
 ```
 
-**Druid监控功能**
+**Step4 Druid监控功能（可选）**
 
 ```yaml
     # 配置监控统计拦截的filters：stat(监控统计)、log4j(日志记录)、wall(防御sql注入)
@@ -644,6 +646,8 @@ spring:
 ```
 
 ### druid配置类
+
+**Step5 druid配置类（可选）**
 
 springboot 内置了servlet 容器，所以没有 `web.xml` ，可以用替代类。
 
@@ -716,7 +720,7 @@ public class DruidConfig {
 
 ## 整合Mybatis框架
 
-### 导入整合包依赖
+**Step1 导入整合包依赖**
 
 查询依赖地址：https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter/2.2.0
 
@@ -727,5 +731,441 @@ public class DruidConfig {
     <version>2.2.0</version>
 </dependency>
 
+```
+
+**Step2 编写 mapper 接口**
+
+```java
+@Mapper  // 表明这是一个mabatis 的 mapper 类
+public interface UserMapper {
+    List<User> get();
+    User getUserById(int id);
+}
+```
+
+Step3 编写 sql 语句
+
+在 `resources` 下创建文件 `UserMapper.xml` ，路径为 `resources/mybatis/mapper/UserMapper.xml` 。
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.withered.mapper.UserMapper">
+    <select id="get" resultType="User">
+		select * from myweb.user
+	</select>
+    <select id="getUserById" resultType="User">
+		select * from myweb.user where id = #{id}
+	</select>
+</mapper>
+```
+
+**Step4 在  `application.yaml` 中设置 mybatis**
+
+在 `application.yaml` 中添加整合 mybatis 的设置， `classpath:` 表示当前文件所在的文件夹。
+
+```yaml
+mybatis:
+  type-aliases-package: com.withered.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+```
+
+## SpringSecurity环境搭建
+
+安全：拦截器、过滤器。
+
+安全框架: shiro、springsecurity（身份认证和授权）
+
+
+
+- 功能权限
+- 访问权限
+- 菜单权限
+- 拦截器、过滤器
+
+[官方文档参考文档](https://spring.io/projects/spring-security)
+
+学习 SpringSecurity 要关注的类和注解：
+
+- WebSecurityConfigurerAdapter：自定义Security策略
+- AuthenticationManagerBuilder:自定义认证策略
+- @EnableWebSecurity：开启WebSecurity模式。@Enablexxxx开启某个功能
+
+### 导入依赖
+
+[在spring官网上引入相关依赖](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.build-systems.starters)
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+### 基本的完整代码
+
+这部分代码包括 用户认证和授权、注销、关闭csrf功能、开启记住我功能。
+
+自定义类 `SecurityConfig` ， 继承 `WebSecurityConfigurerAdapter` 。
+
+```java
+package com.withered.config;
+
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    // 授权
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // 首页所有人都可以访问，功能页只有对应有权限的人才能访问
+        // 请求授权的规则
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/level1/**").hasRole("vip1")
+                .antMatchers("/level2/**").hasRole("vip2")
+                .antMatchers("/level3/**").hasRole("vip3");
+        // 没有权限会到登录页面，需要开启登录的页面
+        http.formLogin();
+        // 防止网站工具。关闭csrf功能。
+        http.csrf().disable();  // 登录失败可能存在的原因
+        // 记住我。开启这个功能。默认保存两周
+        http.rememberMe();
+        // 注销
+        http.logout();
+    }
+
+    // 认证。spring security5.0+ 增加了很多的加密方式。
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("root").password("123123").roles("vip1", "vip2", "vip3")
+                .and()
+                .withUser("test").password("123123").roles("vip1");
+    }
+}
+```
+
+下面分别介绍各部分的内容和代码，以及一些自定义的设置。
+
+### 授权
+
+重写方法 `configure(HttpSecurity http)` （注意是http的 `configure`）。这里的例子是设置不同页面的授权：首页所有人都可以访问，功能页只有对应有权限的人才能访问。
+
+```java
+protected void configure(HttpSecurity http) throws Exception {
+    // 请求授权的规则
+    http.authorizeRequests()
+        .antMatchers("/").permitAll()  // 首页所有人可以访问
+        .antMatchers("/level1/**").hasRole("vip1")  // level1下所有页面有vip1权限的人能访问
+        .antMatchers("/level2/**").hasRole("vip2")  // level2下所有页面有vip2权限的人能访问
+        .antMatchers("/level3/**").hasRole("vip3"); // level3下所有页面有vip3权限的人能访问
+}
+```
+
+- `antMatchers()` ：要为哪个页面设置权限。
+- `permitAll()` ：所有人都可以访问。
+- `hasRole()` ：拥有某个角色/权限。
+
+### 认证
+
+重写方法 `configure(AuthenticationManagerBuilder auth)` （这里是 的 `configure`, 和上面授权的方法参数不同）。这里的例子是设置不同页面的授权：首页所有人都可以访问，功能页只有对应有权限的人才能访问。
+
+```java
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication()
+        .withUser("root").password("123123").roles("vip1", "vip2", "vip3")
+        .and()
+        .withUser("test").password("123123").roles("vip1");
+}
+```
+
+- `.withUser()` ：添加用户
+- `.password()` ：该用户的登录密码。
+- `.roles()` ：该用户拥有哪些角色/权限。
+- `.and()` ：如果需要添加不同的用户，两个用户之后需要用 `.and()` 连接。
+
+### 注销
+
+在 `SecurityConfig` 中开启注销的功能。
+
+```java
+http.logout();
+```
+
+### 记住我
+
+本质是一个cookie。在 `SecurityConfig` 中开启记住我的功能，会在浏览器的cookie中新增一个记录，默认保存2周。
+
+```java
+http.rememberMe();
+```
+
+### 关闭csrf功能
+
+网站使用get请求，会不安全，处出于安全的考虑，网站会拒绝get请求。如果登录时，是用get请求，有可能会不允许登录。可以在  `SecurityConfig` 中关闭csrf。
+
+```java
+http.csrf().disable();  // 登录失败可能存在的原因
+```
+
+### 自定义登录页面
+
+```java
+http.formLogin().usernameParameter("name").passwordParameter("pwd").loginPage("/login");
+```
+
+- `.usernameParameter()` ：登录表单提交时的用户名的 `name` ， 默认是 `username`。
+- `.passwordParameter()` ：登录表单提交时的密码的 `name` ， 默认是 `password`。
+- `.loginPage()` ：自定义登录页面。
+
+
+
+## Shiro
+
+Shiro可以非常容易的开发出足够好的应用，其不仅可以用在JavaSE环境，也可以用在JavaEE环境。
+
+Shiro可以完成，认证，授权，加密，会话管理，Web集成，缓存等。
+
+[官网10分钟快速入门](http://shiro.apache.org/10-minute-tutorial.html)
+
+[Github地址](https://github.com/apache/shiro.git)
+
+### 快速开始
+
+将GitHub上的 `QuickStart` 例子复制到本地的项目中，并启动。
+
+**Step1 创建maven项目**
+
+创建一个maven项目，项目名为 `01-quickstart`。
+
+**Step2 复制依赖** 
+
+在 `pom.xml` 中导入以下依赖：
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-core</artifactId>
+        <version>1.8.0</version>
+    </dependency>
+    <!-- configure logging -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <scope>1.7.21</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <scope>1.7.21</scope>
+    </dependency>
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+</dependencies>
+
+```
+
+**Step3 复制 `log4j.properties`** 
+
+`log4j.properties` 文件放在 `resources` 下。
+
+```properties
+log4j.rootLogger=INFO, stdout
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d %p [%c] - %m %n
+
+# General Apache libraries
+log4j.logger.org.apache=WARN
+
+# Spring
+log4j.logger.org.springframework=WARN
+
+# Default Shiro logging
+log4j.logger.org.apache.shiro=INFO
+
+# Disable verbose logging
+log4j.logger.org.apache.shiro.util.ThreadContext=WARN
+log4j.logger.org.apache.shiro.cache.ehcache.EhCache=WARN
+```
+
+**Step4 复制 `shiro.ini`** 
+
+`shiro.ini` 文件放在 `resources` 下。
+
+```ini
+[users]
+# user 'root' with password 'secret' and the 'admin' role
+root = secret, admin
+# user 'guest' with the password 'guest' and the 'guest' role
+guest = guest, guest
+# user 'presidentskroob' with password '12345' ("That's the same combination on
+# my luggage!!!" ;)), and role 'president'
+presidentskroob = 12345, president
+# user 'darkhelmet' with password 'ludicrousspeed' and roles 'darklord' and 'schwartz'
+darkhelmet = ludicrousspeed, darklord, schwartz
+# user 'lonestarr' with password 'vespa' and roles 'goodguy' and 'schwartz'
+lonestarr = vespa, goodguy, schwartz
+
+# -----------------------------------------------------------------------------
+# Roles with assigned permissions
+#
+# Each line conforms to the format defined in the
+# org.apache.shiro.realm.text.TextConfigurationRealm#setRoleDefinitions JavaDoc
+# -----------------------------------------------------------------------------
+[roles]
+# 'admin' role has all permissions, indicated by the wildcard '*'
+admin = *
+# The 'schwartz' role can do anything (*) with any lightsaber:
+schwartz = lightsaber:*
+# The 'goodguy' role is allowed to 'drive' (action) the winnebago (type) with
+# license plate 'eagle5' (instance specific id)
+goodguy = winnebago:drive:eagle5
+```
+
+**Step5 复制 `Quickstart.java`** 
+
+```java
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+//import org.apache.shiro.ini.IniSecurityManagerFactory;
+//import org.apache.shiro.lang.util.Factory;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Simple Quickstart application showing how to use Shiro's API.
+ *
+ * @since 0.9 RC2
+ */
+public class Quickstart {
+
+    private static final transient Logger log = LoggerFactory.getLogger(Quickstart.class);
+
+
+    public static void main(String[] args) {
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
+
+        // Now that a simple Shiro environment is set up, let's see what you can do:
+
+        // 获取当前用户
+        Subject currentUser = SecurityUtils.getSubject();
+
+        // 通过当前用户拿到session
+        Session session = currentUser.getSession();
+        session.setAttribute("someKey", "aValue");
+        String value = (String) session.getAttribute("someKey");
+        if (value.equals("aValue")) {
+            log.info("Subject ==> session: Retrieved the correct value! [" + value + "]");
+        }
+
+        // let's login the current user so we can check against roles and permissions:
+        // 判断当前用户是否被认证
+        if (!currentUser.isAuthenticated()) {
+            // token 令牌
+            UsernamePasswordToken token = new UsernamePasswordToken("lonestarr", "vespa");
+            token.setRememberMe(true);  // 设置记住我
+            try {
+                currentUser.login(token);  // 执行登录操作
+            } catch (UnknownAccountException uae) {
+                log.info("There is no user with username of " + token.getPrincipal());
+            } catch (IncorrectCredentialsException ice) {
+                log.info("Password for account " + token.getPrincipal() + " was incorrect!");
+            } catch (LockedAccountException lae) {
+                log.info("The account for username " + token.getPrincipal() + " is locked.  " +
+                        "Please contact your administrator to unlock it.");
+            }
+            // ... catch more exceptions here (maybe custom ones specific to your application?
+            catch (AuthenticationException ae) {
+                //unexpected condition?  error?
+            }
+        }
+
+        //say who they are:
+        //print their identifying principal (in this case, a username):
+        log.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
+
+        //test a role:
+        if (currentUser.hasRole("schwartz")) {
+            log.info("May the Schwartz be with you!");
+        } else {
+            log.info("Hello, mere mortal.");
+        }
+
+        //test a typed permission (not instance-level) 粗粒度
+        if (currentUser.isPermitted("lightsaber:wield")) {
+            log.info("You may use a lightsaber ring.  Use it wisely.");
+        } else {
+            log.info("Sorry, lightsaber rings are for schwartz masters only.");
+        }
+
+        //a (very powerful) Instance Level permission:  细粒度
+        if (currentUser.isPermitted("winnebago:drive:eagle5")) {
+            log.info("You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  " +
+                    "Here are the keys - have fun!");
+        } else {
+            log.info("Sorry, you aren't allowed to drive the 'eagle5' winnebago!");
+        }
+
+        //all done - log out!  注销
+        currentUser.logout();
+
+        System.exit(0);  // 结束
+    }
+}
+```
+
+**Step6 启动 `Quickstart` 文件**
+
+启动以后，可以在控制台看到以下信息：
+
+```
+2021-09-22 16:21:01,949 INFO [org.apache.shiro.session.mgt.AbstractValidatingSessionManager] - Enabling session validation scheduler... 
+2021-09-22 16:21:02,279 INFO [Quickstart] - Retrieved the correct value! [aValue] 
+2021-09-22 16:21:02,280 INFO [Quickstart] - User [lonestarr] logged in successfully. 
+2021-09-22 16:21:02,280 INFO [Quickstart] - May the Schwartz be with you! 
+2021-09-22 16:21:02,281 INFO [Quickstart] - You may use a lightsaber ring.  Use it wisely. 
+2021-09-22 16:21:02,281 INFO [Quickstart] - You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  Here are the keys - have fun!
+```
+
+### Subject 分析	
+
+```
+Subject currentUser = SecurityUtils.getSubject();  // 获取当前用户
+Session session = currentUser.getSession();  // 获取session
+currentUser.isAuthenticated()  // 用户是否被认证
+currentUser.getPrincipal()  // 认证信息
+currentUser.hasRole("schwartz")  // 用户角色
+currentUser.isPermitted("lightsaber:wield")  // 用户权限
+currentUser.logout();  // 注销
+```
+
+这些 Spring Security都有。
+
+### Spring boot 整合shiro
+
+**Step1 导入依赖**
+
+```xml
 ```
 
