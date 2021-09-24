@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <h1>This is APP View</h1>
-    <!-- 链接 -->
-    <router-link to="/main">首页</router-link>
-    <router-link to="/content">内容页</router-link>
-    <router-link to="/login">登录</router-link>
+<!--    <h1>This is APP View</h1>-->
+<!--    &lt;!&ndash; 链接 &ndash;&gt;-->
+<!--    <router-link to="/main">首页</router-link>-->
+<!--&lt;!&ndash;    <router-link to="/content">内容页</router-link>&ndash;&gt;-->
+<!--    <router-link to="/login">登录</router-link>-->
     <!-- 视图。展示 template模板 -->
     <router-view></router-view>
   </div>

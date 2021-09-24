@@ -2,7 +2,7 @@ module.exports = {
     // 设置网站title
     chainWebpack: config => {
         config.plugin('html').tap(args => {
-            args[0].title = '智慧城市平台'
+            args[0].title = 'vue各功能活插件示例'
             return args
         });
     },

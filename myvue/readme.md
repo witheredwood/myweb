@@ -1,13 +1,5 @@
 # Vue(JS框架)学习笔记
 
-[toc]
-
-
-
-该项目下 `src` 目录下的文件是HTML中引入 `vue` 的示例。 `vue-demo` 是 `vue` 工程化的示例。
-
-
-
 Vue 是一套用于构建用户界面的**渐进式框架**。与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库只关注视图层。Vue 将前端工程化。
 
 vue官方文档：https://cn.vuejs.org/v2/guide/installation.html
@@ -296,6 +288,7 @@ let vm = new Vue({
     	axios.get('../data.json').then(response => (console.log(response.data)))
 	}
 });
+
 </script>
 ```
 
@@ -316,7 +309,7 @@ let vm = new Vue({
         }
     },
     mounted() {  // 钩子函数。链式编程
-    	axios.get('./data.json').then(response => (this.msg = response.data))
+    	axios.get('../data.json').then(response => (this.msg = response.data))
     }
 });
 </script>
@@ -1051,6 +1044,18 @@ new Vue({
 ------
 
 ## 10. 遇到的问题
+
+**输入url后无错误但不显示页面内容**
+
+在 `App.vue` 中，即使这个页面什么也不显示，但是作为前端的入口文件，必须包含 `<router-view></router-view>` ，否则其他的路径不会显示页面内容。
+
+```vue
+<div id="app">
+    <router-view></router-view>
+</div>
+```
+
+
 
 **createError.js:16 Uncaught (in promise) Error: Request failed with status code 404**
 

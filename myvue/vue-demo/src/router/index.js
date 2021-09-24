@@ -7,6 +7,8 @@ import Main from "../components/Main";
 import Login from "../view/Login";
 import UserList from '../view/user/List';
 import UserProfile from '../view/user/Profile';
+import Ws from '../view/Ws';
+import Pagination from '../view/Pagination';
 
 // 安装路由
 Vue.use(VueRouter);
@@ -32,6 +34,8 @@ export default new VueRouter({
     {
       path: '/login',   // 路由路径
       component: Login,  // 跳转的组件
-    }
+    },
+    {path: '/ws', component: Ws},
+    {path: '/pagination', name: 'Pagination', component: Pagination},
   ]
 })
